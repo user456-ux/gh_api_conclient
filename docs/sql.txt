@@ -1,0 +1,30 @@
+//outer
+SELECT p.Name AS ProductName, p.ProductNumber, sod.SalesOrderID
+FROM Production.Product AS p
+LEFT OUTER JOIN Sales.SalesOrderDetail AS sod
+    ON p.ProductID = sod.ProductID
+WHERE sod.SalesOrderID IS NULL; -- Filters for products with NO sales
+
+//inner
+FROM Production.Product p
+JOIN Sales.SalesOrderDetail sod ON p.ProductID = sod.ProductID
+JOIN Sales.SalesOrderHeader soh ON sod.SalesOrderID = soh.SalesOrderID
+GROUP BY p.Name   
+ORDER BY TotalSales DESC;
+
+SELECT e.BusinessEntityID, p.FirstName, p.LastName, d.Name AS DepartmentName
+FROM HumanResources.Employee e
+JOIN Person.Person p ON e.BusinessEntityID = p.BusinessEntityID
+JOIN HumanResources.EmployeeDepartmentHistory edh ON e.BusinessEntityID = edh.BusinessEntityID
+JOIN HumanResources.Department d ON edh.DepartmentID = d.DepartmentID
+ORDER BY DepartmentName DESC;
+
+
+//explicit
+select TOP 10 p.FirstName, a.AddressLine1, emp.JobTitle from Person.person p
+JOIN Person.Address a   ON  p.BusinessEntityID = a.AddressID
+JOIN HumanResources.Employee emp ON p.BusinessEntityID = emp.BusinessEntityID 
+
+select TOP 10 p.FirstName, a.AddressLine1, emp.JobTitle 
+from Person.person p, Person.Address a, HumanResources.Employee emp
+where p.BusinessEntityID = emp.BusinessEntityID and a.AddressID = p.BusinessEntityID
